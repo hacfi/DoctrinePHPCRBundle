@@ -12,7 +12,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Doctrine\Bundle\PHPCRBundle\Command;
+namespace Doctrine\Bundle\PHPCRBundle\Command\ODM;
 
 use Doctrine\ODM\PHPCR\Mapping\MappingException;
 use Symfony\Component\Console\Input\InputOption;

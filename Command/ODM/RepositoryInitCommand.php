@@ -18,7 +18,7 @@
  * <http://www.doctrine-project.org>.
  */
 
-namespace Doctrine\Bundle\PHPCRBundle\Command;
+namespace Doctrine\Bundle\PHPCRBundle\Command\ODM;
 
 use Doctrine\ODM\PHPCR\Tools\Console\Command\RegisterSystemNodeTypesCommand as BaseRegisterSystemNodeTypesCommand;
 
