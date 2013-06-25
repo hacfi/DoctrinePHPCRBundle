@@ -24,6 +24,7 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\DependencyInjection\Compiler\PassConfig;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Console\Application;
+use Symfony\Component\Finder\Finder;
 
 use Symfony\Bridge\Doctrine\DependencyInjection\CompilerPass\RegisterEventListenersAndSubscribersPass;
 
@@ -49,7 +50,24 @@ class DoctrinePHPCRBundle extends Bundle
      */
     public function registerCommands(Application $application)
     {
-        parent::registerCommands($application);
+        if (!is_dir($dir = $this->getPath().'/Command')) {
+            return;
+        }
+
+        $finder = new Finder();
+        $finder->files()->name('*Command.php')->in($dir)->depth(0);
+
+        $prefix = $this->getNamespace().'\\Command';
+        foreach ($finder as $file) {
+            $ns = $prefix;
+            if ($relativePath = $file->getRelativePath()) {
+                $ns .= '\\'.strtr($relativePath, '/', '\\');
+            }
+            $r = new \ReflectionClass($ns.'\\'.$file->getBasename('.php'));
+            if ($r->isSubclassOf('Symfony\\Component\\Console\\Command\\Command') && !$r->isAbstract()) {
+                $application->add($r->newInstance());
+            }
+        }
 
         if (class_exists('\Jackalope\Tools\Console\Command\JackrabbitCommand')) {
             $application->add(new JackrabbitCommand());
