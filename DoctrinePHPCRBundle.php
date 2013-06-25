@@ -31,6 +31,8 @@ use Symfony\Bridge\Doctrine\DependencyInjection\CompilerPass\RegisterEventListen
 use Doctrine\Common\Util\ClassUtils;
 use Doctrine\Bundle\PHPCRBundle\DependencyInjection\Compiler\MigratorPass;
 use Doctrine\Bundle\PHPCRBundle\DependencyInjection\Compiler\InitializerPass;
+use Doctrine\Bundle\PHPCRBundle\Command\ODM\InfoDoctrineCommand;
+use Doctrine\Bundle\PHPCRBundle\Command\ODM\RepositoryInitCommand;
 use Doctrine\Bundle\PHPCRBundle\Command\Jackalope\InitDoctrineDbalCommand;
 use Doctrine\Bundle\PHPCRBundle\Command\Jackalope\JackrabbitCommand;
 
@@ -67,6 +69,11 @@ class DoctrinePHPCRBundle extends Bundle
             if ($r->isSubclassOf('Symfony\\Component\\Console\\Command\\Command') && !$r->isAbstract()) {
                 $application->add($r->newInstance());
             }
+        }
+
+        if (class_exists('Doctrine\\ODM\\PHPCR\\Version')) {
+            $application->add(new InfoDoctrineCommand());
+            $application->add(new RepositoryInitCommand());
         }
 
         if (class_exists('\Jackalope\Tools\Console\Command\JackrabbitCommand')) {
