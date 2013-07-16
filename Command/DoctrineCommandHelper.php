@@ -22,6 +22,9 @@ namespace Doctrine\Bundle\PHPCRBundle\Command;
 
 use Symfony\Component\Console\Application;
 
+use Doctrine\ODM\PHPCR\Tools\Console\Helper\DocumentManagerHelper;
+use PHPCR\Util\Console\Helper\PhpcrHelper;
+
 use Jackalope\Tools\Console\Helper\DoctrineDbalHelper;
 use Jackalope\Tools\Console\Helper\JackrabbitHelper;
 use Jackalope\Transport\DoctrineDBAL\Client;
@@ -41,9 +44,9 @@ abstract class DoctrineCommandHelper
         $session = $application->getKernel()->getContainer()->get($service);
         $helperSet = $application->getHelperSet();
         if (class_exists('Doctrine\\ODM\\PHPCR\\Version')) {
-            $helperSet->set(new \Doctrine\ODM\PHPCR\Tools\Console\Helper\DocumentManagerHelper($session));
+            $helperSet->set(new DocumentManagerHelper($session));
         } else {
-            $helperSet->set(new \PHPCR\Util\Console\Helper\PhpcrHelper($session));
+            $helperSet->set(new PhpcrHelper($session));
 
         }
 
